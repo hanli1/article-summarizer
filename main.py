@@ -26,17 +26,17 @@ def word_order_similarity(s1_tokens, s2_tokens):
     joined_set = list(set(s1_tokens).union(set(s2_tokens)))
 
     def generate_r_vector(tokens):
-        r = [x for x in range(len(s1_tokens))]
+        r = [0 for x in range(max(len(s1_tokens), len(s2_tokens)))]
         for i, word in enumerate(joined_set):
             if word in tokens:
+                # print tokens
+                # print joined_set
                 r[tokens.index(word)] = i
             else:
                 max_sim = -1
                 found_word = None
                 for token in tokens:
                     sim = word_similarity(word, token)
-                    # print word + " " + token
-                    # print sim
                     if sim > max_sim:
                         max_sim = sim
                         found_word = token
@@ -74,9 +74,25 @@ with open("sample.txt", "r") as f:
     text = remove_non_ascii(f.read())
     tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
     sentences = tokenizer.tokenize(text)
+    token_sentences = [nltk.word_tokenize(x) for x in sentences]
 
     # print preprocess(["I don't like cats"])
 
-    print word_order_similarity(nltk.word_tokenize("A quick brown dog jumps over the lazy fox"), nltk.word_tokenize("A quick brown fox jumps over the lazy dog"))
-    print word_order_similarity(nltk.word_tokenize("I do not get how this works"), nltk.word_tokenize("nobody likes natural language processing"))
-    print word_order_similarity(nltk.word_tokenize("cat likes dog"), nltk.word_tokenize("dog likes cat"))
+    # print word_order_similarity(nltk.word_tokenize("A quick brown dog jumps over the lazy fox"), nltk.word_tokenize("A quick brown fox jumps over the lazy dog"))
+    # print word_order_similarity(nltk.word_tokenize("I do not get how this works"), nltk.word_tokenize("nobody likes natural language processing"))
+    # print word_order_similarity(nltk.word_tokenize("cat likes dog"), nltk.word_tokenize("dog likes cat"))
+
+    all_maxes = []
+    for i in range(len(token_sentences)):
+        total = 0
+        for j in range(len(token_sentences)):
+            if i != j:
+                total += word_order_similarity(token_sentences[i], token_sentences[j])
+
+        all_maxes.append((sentences[i], total))
+
+    all_maxes = sorted(all_maxes, key=lambda tup: tup[1], reverse=True)
+
+    print all_maxes[0]
+    for i, j in all_maxes:
+        print i
