@@ -3,7 +3,7 @@ import csv
 import main
 import preprocess
 
-def calculate_accuracy():
+def calculate_accuracy(summary_function, num_sentences, samples=float('inf')):
     kaggle = []
 
     with open('kaggle.csv', 'rb') as f:
@@ -23,16 +23,27 @@ def calculate_accuracy():
             kaggle.append((summary, text))
 
     total_accuracy = 0
-    for actual, text in kaggle:
-        predicted = main.cosine_summary(preprocess.text_to_sentences(text), num_sentences=2)
+    for i, (actual, text) in enumerate(kaggle):
+        if i >= samples:
+            break
 
-        pair = [predicted, actual]
+        predicted = summary_function(preprocess.text_to_sentences(text), num_sentences)
 
-        accuracy = main.cosine_similarity(pair)[0][1]
+        accuracy = main.cosine_similarity_two_sentences(predicted, actual)
         total_accuracy += accuracy
+        # print "evaluated sample: " + str(i)
 
     print total_accuracy/float(len(kaggle))
 
+def test_sample():
+    with open("sample.txt", "r") as f:
+        text = f.read()
+        text = preprocess.remove_non_ascii(text)
+        sentences = preprocess.text_to_sentences(text)
+        summary = main.word_order_summary(sentences, num_sentences=2)        
+        print summary
 
+# test_sample()
 
-calculate_accuracy()
+# calculate_accuracy(main.cosine_summary, 2, samples=1000)
+calculate_accuracy(main.word_order_summary, 2, samples=1)
