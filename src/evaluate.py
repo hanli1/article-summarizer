@@ -6,7 +6,7 @@ import preprocess
 def calculate_accuracy(summary_function, num_sentences, samples=float('inf')):
     kaggle = []
 
-    with open('kaggle.csv', 'rb') as f:
+    with open('data/kaggle.csv', 'rb') as f:
         reader = csv.reader(f)
         for row in reader:
             summary = row[4]
@@ -36,7 +36,7 @@ def calculate_accuracy(summary_function, num_sentences, samples=float('inf')):
     print total_accuracy/float(len(kaggle))
 
 def test_sample():
-    with open("sample.txt", "r") as f:
+    with open("data/sample.txt", "r") as f:
         text = f.read()
         text = preprocess.remove_non_ascii(text)
         sentences = preprocess.text_to_sentences(text)
