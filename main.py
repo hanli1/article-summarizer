@@ -2,6 +2,7 @@ from nltk.corpus import wordnet
 import nltk
 import numpy as np
 import preprocess
+import time
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -105,8 +106,28 @@ def main():
     # print word_order_similarity(nltk.word_tokenize("hello world I am"), nltk.word_tokenize("back to haunt everything"))
     # print word_order_similarity(nltk.word_tokenize("cat likes dog"), nltk.word_tokenize("dog likes cat"))
     # print word_order_similarity(nltk.word_tokenize("i like cats"), nltk.word_tokenize("you hate dogs"))
-    # print(word_similarity("cat", "dog"))
-    test_sample()
+    a = time.time()
+    print(word_similarity("cat", "dog"))
+    print(time.time() - a)
+
+    a = time.time()
+    print(word_similarity("cat", "dog"))
+    print(time.time() - a)
+
+    a = time.time()
+    print(word_similarity("cat", "dog"))
+    print(time.time() - a)
+
+
+    a = time.time()
+    print(word_similarity("animal", "cow"))
+    print(time.time() - a)
+
+
+    a = time.time()
+    print(word_similarity("duck", "pig"))
+    print(time.time() - a)
+    #test_sample()
 
 if __name__ == '__main__':
     main()
