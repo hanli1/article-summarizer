@@ -1,6 +1,9 @@
 import nltk
 import numpy as np
-
+import csv
+import utils
+import evaluate
+from tqdm import tqdm
 
 class SentenceNode:
 
@@ -34,7 +37,7 @@ class LexRank:
 
     def initialize_embeddings(self):
         self.embeddings = {}
-        with open("glove/glove.6B.300d.txt", 'r', encoding="utf8") as f:
+        with open("glove/glove.6B.300d.txt", 'r') as f:
             for line in f.readlines():
                 line_components = line.split()
                 if line_components[0] in self.lexicon:
@@ -44,8 +47,7 @@ class LexRank:
 
     def initialize_lexicon(self):
         self.lexicon = set()
-        flattened_corpus = sum(self.corpus, [])
-        for document in flattened_corpus:
+        for document in self.corpus:
             tokens = nltk.word_tokenize(document)
             for token in tokens:
                 if not token in self.lexicon:
@@ -112,12 +114,44 @@ class LexRank:
         page_rank_and_sentences = []
         for i in range(len(page_rank_distribution)):
             page_rank_and_sentences.append((node_id_to_sentence[i], page_rank_distribution[i]))
-        sorted_page_rank_and_sentences = sorted(page_rank_and_sentences, key=lambda x: x[1], reverse=True)
+        sorted_page_rank_and_sentences = sorted(page_rank_and_sentences, key=lambda x: x[1], \
+            reverse=True)
         return list(map(lambda x: x[0], sorted_page_rank_and_sentences))
 
     def get_summary_sentences(self, document, sentence_count):
         lex_rank_ordering = self.compute_lex_rank_ordering(document)
         return lex_rank_ordering[:sentence_count]
+
+
+def evaluate_lex_rank(text_and_summary):
+    corpus = list(map(lambda x: x[0], text_and_summary))
+    lex_rank_parameter_sets = []
+    cosine_similarity_cutoffs = [0.85]
+    for cutoff in cosine_similarity_cutoffs:
+        lex_rank_parameter_sets.append({
+           "cosine_similarity_cutoff": cutoff 
+        })
+    for parameter_set in lex_rank_parameter_sets:
+        lex_rank = LexRank(corpus=corpus, cosine_similarity_cutoff=\
+            parameter_set["cosine_similarity_cutoff"])
+        total_precision = 0.0
+        total_recall = 0.0
+        for (text, summary) in tqdm(text_and_summary):
+            summary_sentences = lex_rank.get_summary_sentences(text, 2)
+            (precision, recall) = evaluate.rouge1_precision_and_recall(" ".join(summary_sentences), \
+                summary)
+            total_precision += precision
+            total_recall += recall
+        final_precision = total_precision / len(text_and_summary)
+        final_recall = total_recall / len(text_and_summary)
+        final_f1 = (2 * final_precision * final_recall) / (final_precision + final_recall)
+        print("Lex Rank with Cosine Similarity Cutoff {}, Precision: {}, Recall: {}, F1:{}", \
+            parameter_set["cosine_similarity_cutoff"], final_precision, final_recall, final_f1)
+
+
+
+if __name__ == '__main__':
+    evaluate_lex_rank(utils.get_kaggle_data())
 
 
 

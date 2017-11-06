@@ -1,29 +1,15 @@
 import csv
-
+import utils
 import main
 import preprocess
+from collections import Counter
+import nltk
 
 def calculate_accuracy(summary_function, num_sentences, samples=float('inf')):
-    kaggle = []
-
-    with open('data/kaggle.csv', 'rb') as f:
-        reader = csv.reader(f)
-        for row in reader:
-            summary = row[4]
-            text = row[5]
-            if summary == "text":
-                continue
-
-            if text == "":
-                # dataset messed up
-                continue
-
-            summary = preprocess.remove_non_ascii(summary)
-            text = preprocess.remove_non_ascii(text)
-            kaggle.append((summary, text))
+    text_and_summary = utils.get_kaggle_data()
 
     total_accuracy = 0
-    for i, (actual, text) in enumerate(kaggle):
+    for i, (text, actual) in enumerate(text_and_summary):
         if i >= samples:
             break
 
@@ -33,7 +19,7 @@ def calculate_accuracy(summary_function, num_sentences, samples=float('inf')):
         total_accuracy += accuracy
         # print "evaluated sample: " + str(i)
 
-    print total_accuracy/float(len(kaggle))
+    print total_accuracy/float(len(text_and_summary))
 
 def test_sample():
     with open("data/sample.txt", "r") as f:
@@ -43,7 +29,18 @@ def test_sample():
         summary = main.word_order_summary(sentences, num_sentences=2)        
         print summary
 
-# test_sample()
+def rouge1_precision_and_recall(predicted_summary, actual_summary):
+    prediction_tokens = nltk.word_tokenize(predicted_summary)
+    actual_tokens = nltk.word_tokenize(actual_summary)
+    prediction_counter = Counter(prediction_tokens)
+    actual_counter = Counter(actual_tokens)
+    total_overlap = 0
+    for key in prediction_counter:
+        if key in actual_counter:
+            total_overlap += min(prediction_counter[key], actual_counter[key])
+    precision = float(total_overlap) / len(prediction_tokens)
+    recall = float(total_overlap) / len(actual_tokens)
+    return (precision, recall)
 
-# calculate_accuracy(main.cosine_summary, 2, samples=1000)
-calculate_accuracy(main.word_order_summary, 2, samples=1)
+if __name__ == '__main__':
+    calculate_accuracy(main.word_order_summary, 2, samples=1)
