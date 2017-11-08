@@ -37,8 +37,11 @@ def calculate_rouge1(summary_function, num_sentences, samples=float('inf')):
         total_p += p
         total_r += r
 
-    print "Precision: " + str(total_p/len(text_and_summary))
-    print "Recall: " + str(total_r/len(text_and_summary))
+    precision = total_p/len(text_and_summary)
+    recall = total_r/len(text_and_summary)
+    print "Precision: " + str(precision)
+    print "Recall: " + str(recall)
+    print "F-score: " + str(2 * precision * recall/ (precision + recall))
 
 def test_sample():
     with open("data/sample.txt", "r") as f:
@@ -63,5 +66,6 @@ def rouge1_precision_and_recall(predicted_summary, actual_summary):
 
 if __name__ == '__main__':
     # calculate_accuracy(main.word_order_summary, 2, samples=1)
-    # calculate_rouge1(main.word_order_summary, 2, samples=10)
-    calculate_rouge1(main.cosine_summary, 2)
+    # calculate_rouge1(main.word_order_summary, 2)
+    # calculate_rouge1(main.cosine_summary, 2, samples=10)
+    calculate_rouge1(main.cosine_and_word_order_summary, 2)
