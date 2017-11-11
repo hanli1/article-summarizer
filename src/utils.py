@@ -3,7 +3,7 @@ import preprocess
 
 def get_kaggle_data():
     text_and_summary = []
-    with open('data/kaggle.csv', 'r') as f:
+    with open('../data/kaggle.csv', 'r') as f:
         reader = csv.reader(f)
         for row in reader:
             summary = row[4]

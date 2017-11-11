@@ -7,6 +7,7 @@ import time
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 def word_similarity(w1, w2):
+    return 0
     # pick for word sense for now
     x = wordnet.synsets(w1)
     y = wordnet.synsets(w2)
@@ -68,9 +69,6 @@ def word_order_summary(sentences, num_sentences=1):
 
     return summary
 
-    # for i, j in all_maxes:
-    #     print i
-
 def cosine_similarity(sentences):
     vect = TfidfVectorizer(min_df=1)
     tfidf = vect.fit_transform(sentences)
@@ -93,6 +91,32 @@ def cosine_summary(sentences, num_sentences=1):
         summary += index_and_likely[i][0]
 
     return summary
+
+def cosine_and_word_order_summary(sentences, num_sentences=1):
+    ALPHA = 0.9
+
+    all_maxes = []
+    token_sentences = preprocess.sentences_to_tokens(sentences)
+    cos_sim = cosine_similarity(sentences);
+    for i in range(len(sentences)):
+        total = 0
+        for j in range(len(sentences)):
+            if i != j:
+                weighted = ALPHA * cos_sim[i][j] + (1-ALPHA) * word_order_similarity(token_sentences[i], token_sentences[j])
+                total += weighted
+
+        all_maxes.append((sentences[i], total))
+
+    all_maxes = sorted(all_maxes, key=lambda tup: tup[1], reverse=True)
+
+    summary = ""
+    for i in range(num_sentences):
+        if i >= len(all_maxes):
+            break
+        summary += all_maxes[i][0]
+
+    return summary
+
 
 def edit_distance(w1, w2):
     return nltk.edit_distance(w1, w2)
