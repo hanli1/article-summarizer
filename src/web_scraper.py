@@ -37,7 +37,7 @@ class WebScraper:
     def scrape_articles(self, seed_urls):
         self.frontier_urls = seed_urls
         a = 0
-        while len(self.frontier_urls) > 0 and (len(self.all_scraped_articles) <= 4000):
+        while len(self.frontier_urls) > 0 and (len(self.all_scraped_articles) <= 1000):
             current_article = self.frontier_urls.pop(0)
             parse_uri = urlparse(current_article)
             #print("HOSTY: {}".format(parse_uri.netloc))
@@ -60,4 +60,5 @@ if __name__ == '__main__':
     web_scraper = WebScraper()
     web_scraper.scrape_articles(["http://www.bbc.com/news/world-us-canada-41954436", \
         "http://www.bbc.com/news/technology-41942310", \
-        "http://www.bbc.com/sport/rugby-union/41934487"])
+        "http://www.bbc.com/sport/rugby-union/41934487", \
+        "http://www.bbc.com/news/entertainment-arts-41935971"])
