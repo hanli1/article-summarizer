@@ -9,12 +9,21 @@ from django.http import JsonResponse
 import os
 import numpy as np
 
-# Create your views here.
+
 def index(request):
     output_list = ''
     output=''
     return render_to_response('project_template/index.html')
 
+
 def search(request):
     search = request.GET.get('query')
     return JsonResponse({"results": search + " djkf"})
+
+
+def api_articles_list(request):
+    pass
+
+
+def api_article_summary(request):
+    pass
