@@ -17,6 +17,6 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-	url(r'^', include('project_template.urls')),
+	url(r'^', include('article_summarizer_app.urls')),
     url(r'^admin/', admin.site.urls),
 ]
