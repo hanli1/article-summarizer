@@ -26,7 +26,8 @@ def parse_bbc_article(url):
             'author': "BBC",
             'date': date,
             'text': text,
-            'links': links
+            'links': links,
+            'url': url
         }
     except Exception:
         return {
@@ -34,7 +35,8 @@ def parse_bbc_article(url):
             'author': "",
             'date': "",
             'text': "",
-            'links': ""
+            'links': "",
+            'url': ""
         }
 
 def parse_abc_article(url):
@@ -56,7 +58,8 @@ def parse_abc_article(url):
             'author': author,
             'date': date,
             'text': text,
-            'links': links
+            'links': links,
+            'url' : url
         }
     except Exception:
         return {
@@ -64,7 +67,8 @@ def parse_abc_article(url):
             'author': "",
             'date': "",
             'text': "",
-            'links': ""
+            'links': "",
+            'url': ""
         }
 
 # parse_bbc_article("http://www.bbc.com/news/world-europe-41798254")

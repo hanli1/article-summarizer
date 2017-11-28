@@ -18,7 +18,8 @@ class WebScraper:
                 "title": parsed_article.get("title"),
                 "date": parsed_article.get("date"),
                 "text": parsed_article.get("text"),
-                "author": parsed_article.get("author")
+                "author": parsed_article.get("author"),
+                "url": parsed_article.get("url")
             })
             print("GOT ARTICLE {}".format(len(self.all_scraped_articles)))
         for article_url in parsed_article["links"]:
@@ -37,7 +38,7 @@ class WebScraper:
     def scrape_articles(self, seed_urls):
         self.frontier_urls = seed_urls
         a = 0
-        while len(self.frontier_urls) > 0 and (len(self.all_scraped_articles) <= 1000):
+        while len(self.frontier_urls) > 0 and (len(self.all_scraped_articles) <= 2000):
             current_article = self.frontier_urls.pop(0)
             parse_uri = urlparse(current_article)
             #print("HOSTY: {}".format(parse_uri.netloc))
