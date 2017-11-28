@@ -11,7 +11,7 @@ class WebScraper:
         self.seen_url_set = set()
         self.all_scraped_articles = []
 
-    def process_article(self, parsed_article, article_hostname):
+    def process_article(self, parsed_article, article_hostname, article_organization):
         if (parsed_article.get("title") != "") and (parsed_article.get("date") != "") and \
         (parsed_article.get("text") != ""):
             self.all_scraped_articles.append({
@@ -19,7 +19,8 @@ class WebScraper:
                 "date": parsed_article.get("date"),
                 "text": parsed_article.get("text"),
                 "author": parsed_article.get("author"),
-                "url": parsed_article.get("url")
+                "article_url": parsed_article.get("article_url"),
+                "organization": article_organization
             })
             print("GOT ARTICLE {}".format(len(self.all_scraped_articles)))
         for article_url in parsed_article["links"]:
@@ -38,18 +39,18 @@ class WebScraper:
     def scrape_articles(self, seed_urls):
         self.frontier_urls = seed_urls
         a = 0
-        while len(self.frontier_urls) > 0 and (len(self.all_scraped_articles) <= 2000):
+        while len(self.frontier_urls) > 0 and (len(self.all_scraped_articles) <= 1000):
             current_article = self.frontier_urls.pop(0)
             parse_uri = urlparse(current_article)
             #print("HOSTY: {}".format(parse_uri.netloc))
             if parse_uri.netloc == "www.bbc.com" or parse_uri.netloc == "bbc.com":
                 #print("HELLO")
                 parsed_article = parse_bbc_article(current_article)
-                self.process_article(parsed_article, "bbc.com")
+                self.process_article(parsed_article, "bbc.com", "BBC")
             elif parse_uri.netloc == "www.abcnews.go.com" or parse_uri.netloc == "abcnews.go.com":
                 #print("HELLO")
                 parsed_article = parse_abc_article(current_article)
-                self.process_article(parsed_article, "abcnews.go.com")
+                self.process_article(parsed_article, "abcnews.go.com", "ABC News")
             #print("FRONTIER:{}".format(self.frontier_urls))
             a += 1
         #print("ITERATIONS: {}".format(a))

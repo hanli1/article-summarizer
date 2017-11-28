@@ -27,7 +27,7 @@ def parse_bbc_article(url):
             'date': date,
             'text': text,
             'links': links,
-            'url': url
+            'article_url': url
         }
     except Exception:
         return {
@@ -36,7 +36,7 @@ def parse_bbc_article(url):
             'date': "",
             'text': "",
             'links': "",
-            'url': ""
+            'article_url': ""
         }
 
 def parse_abc_article(url):
@@ -59,7 +59,7 @@ def parse_abc_article(url):
             'date': date,
             'text': text,
             'links': links,
-            'url' : url
+            'article_url' : url
         }
     except Exception:
         return {
@@ -68,7 +68,7 @@ def parse_abc_article(url):
             'date': "",
             'text': "",
             'links': "",
-            'url': ""
+            'article_url': ""
         }
 
 # parse_bbc_article("http://www.bbc.com/news/world-europe-41798254")
