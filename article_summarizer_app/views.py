@@ -13,7 +13,7 @@ import numpy as np
 def index(request):
     output_list = ''
     output=''
-    return render_to_response('project_template/index.html')
+    return render_to_response('index.html')
 
 
 def search(request):

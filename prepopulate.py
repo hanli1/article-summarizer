@@ -19,9 +19,9 @@ def populate_database(data_files):
         if article["organization"] == "BBC":
             datetime_obj = datetime.strptime(article["date"], '%d %B %Y')
         elif article["organization"] == "ABC News":
-            date_components = article["date"].replace(",","").split()
+            date_components = article["date"].replace(",", "").split()
             datetime_obj = datetime_obj.strptime(" ".join(date_components[:3]), '%d %B %Y')
-        summary = lex_rank.get_summary_sentences( " ".join(article["text"]), 5)
+        summary = lex_rank.get_summary_sentences(" ".join(article["text"]), 5)
         NewsArticle.objects.get_or_create(
             date=datetime_obj,
             title=article["title"],
@@ -39,11 +39,11 @@ def populate_database(data_files):
 
 # Start execution here!
 if __name__ == '__main__':
-  reload(sys)
-  sys.setdefaultencoding("utf-8")
-  os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'website.local_settings')
+    reload(sys)
+    sys.setdefaultencoding("utf-8")
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'website.local_settings')
 
-  import django
-  django.setup()
-  from article_summarizer_app.models import NewsArticle
-  populate_database(["data/articles_1001"])
+    import django
+    django.setup()
+    from article_summarizer_app.models import NewsArticle
+    populate_database(["data/articles_1001.json"])
