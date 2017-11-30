@@ -1,0 +1,62 @@
+.date-wrapper {
+
+}
+
+.article-wrapper {
+    border: 2px solid black;
+    background-color: #e6e6e6;
+    padding-right: 5%;
+    padding-left: 5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.article-title {
+    text-align: center;
+    font-size: 15px;
+    font-weight: bolder;
+    margin-bottom: 10px;
+}
+
+.article-organization-wrapper {
+    margin-bottom: 10px;
+}
+
+.article-author-wrapper {
+    margin-bottom: 10px;
+}
+
+.article-original-link-wrapper {
+    margin-bottom: 10px;
+}
+
+.article-summary-length-wrapper {
+    border: 1px solid black;
+    padding: 5%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.article-summary-method-wrapper {
+    border: 1px solid black;
+    padding: 5%;
+}
+
+.article-summary-header-wrapper {
+    display: inline-block;
+    width: 25%;
+}
+
+.article-summary {
+    display: inline-block;
+    width: 72%;
+}
+
+.article-field-header {
+    font-weight: bold;
+}
+
+#article-results {
+    margin-top: 20px;
+    padding: 0;
+}
