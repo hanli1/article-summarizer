@@ -13,14 +13,9 @@ $( document ).ready(function() {
   
   function send_search_query(){
     $("#search-button").blur();
-    // on search button click send query to django backend
-    data = { 
-        query: "Hello"
-    };
-    $.get('api/search', data, function(response){
-      var results = response["results"];
-      console.log(results);
-    });
+    textQuery = $("#search-input").val();
+    pageCount = 1;
+    fetchArticleList(textQuery);
   }
 
   $("#summarize-button").click(send_summarize_query);
@@ -72,12 +67,16 @@ $( document ).ready(function() {
         text_query: textQuery
       },
       success: function (responseData) {
+        var container = $("#article-results");
         var currentArticlesSelector = $('.article-wrapper');
         var currentDatesSelector = $('.date-wrapper');
         var templateArticleWrapper = currentArticlesSelector.eq(0);
         var previousArticleWrapper = currentArticlesSelector.eq(currentArticlesSelector.length - 1);
         var templateDateWrapper = currentDatesSelector.eq(0);
 
+        if(pageCount == 1)
+            container.empty();
+ 
         for (var i = 0; i < responseData.articles_list.length; i++) {
           var currentArticle = responseData.articles_list[i];
           var currentArticleWrapper = templateArticleWrapper.clone();
@@ -94,11 +93,11 @@ $( document ).ready(function() {
           if (currentArticle.date != currentDate) {
             var currentDateWrapper = templateDateWrapper.clone();
             currentDateWrapper.text(currentArticle.date);
-            currentDateWrapper.insertAfter(previousArticleWrapper);
-            currentArticleWrapper.insertAfter(currentDateWrapper);
+            container.append(currentDateWrapper);
+            container.append(currentArticleWrapper);
             currentDate = currentArticle.date;
           } else {
-            currentArticleWrapper.insertAfter(previousArticleWrapper);
+            container.append(currentArticleWrapper);
           }
           previousArticleWrapper = currentArticleWrapper;
         }

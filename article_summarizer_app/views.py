@@ -8,6 +8,7 @@ import numpy as np
 
 from text_summarization.lex_rank import LexRank 
 from text_summarization import utils 
+from text_summarization import main
 
 def index(request):
     output_list = ''
@@ -22,10 +23,19 @@ def api_articles_list(request):
     articles = None
     try:
         if text_query:
-            """
-            Implement for Text Search
-            """
-            pass
+            articles = NewsArticle.objects.order_by('-date')   
+            date_dict = {}
+            for article in articles:
+                date = article.date
+                sim = main.cosine_similarity_two_sentences(text_query, article.title)
+                if sim > 0.2:
+                    if date not in date_dict:
+                        date_dict[date] = []
+                    date_dict[date].append((sim, article))
+            articles = []
+
+            for date, lst in sorted(date_dict.iteritems(), reverse=True):
+                articles += [x[1] for x in sorted(lst, key=lambda x: x[0], reverse=True)]
         else:
             articles = NewsArticle.objects.order_by('-date')
         articles_paginator = Paginator(articles, page_size)

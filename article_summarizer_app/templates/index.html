@@ -14,105 +14,111 @@
                     <li><a href="#about" data-toggle="tab">About</a></li>
                 </ul>
             </div>
-            <div id="myTabContent" class="tab-content">
-                <div class="tab-pane fade active in" id="articles">
-                    <div class="row">
-                        <div class="form-inline global-search" method='GET'>
-                            <div class="form-group">
-                                <input id="user-selection-input" type="text" name="search" class="form-control shadow" placeholder="Your Input">
-                                <button id="search-button" class="btn btn-info">Search</button>
+            <div class="row">
+                <div class="tab-content">
+                    <div class="tab-pane fade active in" id="articles">
+                        <div class="container">
+                            <div class="row">
+                                <div class="form-inline global-search" method='GET'>
+                                    <div class="form-group">
+                                        <input id="search-input" type="text" name="search" class="form-control shadow" placeholder="Keywords">
+                                        <button id="search-button" class="btn btn-info">Search</button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div id="article-results" class="col-md-8 offset-md-2 col-centered">
-                            <div class="date-wrapper"></div>
-                            <div class="article-wrapper">
-                                <div class="article-title">Title</div>
-                                <div class="article-organization-wrapper">
-                                    <span class="article-field-header">Organization: </span>
-                                    <span class="article-organization"></span>
-                                </div>
-                                <div class="article-author-wrapper">
-                                    <span class="article-field-header">Author: </span>
-                                    <span class="article-author"></span>
-                                </div>
-                                <div class="article-original-link-wrapper">
-                                    <span class="article-field-header">Original Link: </span>
-                                    <a href="" class="article-original-link"></a>
-                                </div>
-                                <div class="article-summary-wrapper">
-                                    <div class="article-summary-header-wrapper">
-                                        <div class="article-field-header">
-                                            Text Summary:
+                            <div class="row">
+                                <div class="date-wrapper"></div>
+                                    <div class="article-wrapper">
+                                        <div class="article-title">Title</div>
+                                        <div class="article-organization-wrapper">
+                                            <span class="article-field-header">Organization: </span>
+                                            <span class="article-organization"></span>
                                         </div>
-                                        <div class="article-summary-length-wrapper">
-                                              <form>
-                                                  <div class="radio">
-                                                      <label>
-                                                          <input class="short-summary-radio-button" type="radio"
-                                                          name="summary-radio-button" value="short">Short
-                                                      </label>
-                                                  </div>
-                                                  <div class="radio">
-                                                      <label>
-                                                          <input class="medium-summary-radio-button" type="radio"
-                                                          name="summary-radio-button" value="medium">Medium
-                                                      </label>
-                                                  </div>
-                                                  <div class="radio">
-                                                      <label>
-                                                          <input class="long-summary-radio-button" type="radio"
-                                                          name="summary-radio-button" value="long">Long
-                                                      </label>
-                                                  </div>
-                                              </form>
+                                        <div class="article-author-wrapper">
+                                            <span class="article-field-header">Author: </span>
+                                            <span class="article-author"></span>
                                         </div>
-                                        <div class="article-summary-method-wrapper">
-                                              <form>
-                                                  <div class="radio">
-                                                      <label>
-                                                          <input class="top-sentences-radio-button" type="radio"
-                                                          name="optradio">Top Sentences
-                                                      </label>
-                                                  </div>
-                                                  <div class="radio">
-                                                      <label>
-                                                          <input class="top-block-of-text-radio-button" type="radio"
-                                                          name="optradio">Top Block of Text
-                                                      </label>
-                                                  </div>
-                                              </form>
+                                        <div class="article-original-link-wrapper">
+                                            <span class="article-field-header">Original Link: </span>
+                                            <a href="" class="article-original-link"></a>
+                                        </div>
+                                        <div class="article-summary-wrapper">
+                                            <div class="article-summary-header-wrapper">
+                                                <div class="article-field-header">
+                                                    Text Summary:
+                                                </div>
+                                                <div class="article-summary-length-wrapper">
+                                                      <form>
+                                                          <div class="radio">
+                                                              <label>
+                                                                  <input class="short-summary-radio-button" type="radio"
+                                                                  name="summary-radio-button" value="short">Short
+                                                              </label>
+                                                          </div>
+                                                          <div class="radio">
+                                                              <label>
+                                                                  <input class="medium-summary-radio-button" type="radio"
+                                                                  name="summary-radio-button" value="medium">Medium
+                                                              </label>
+                                                          </div>
+                                                          <div class="radio">
+                                                              <label>
+                                                                  <input class="long-summary-radio-button" type="radio"
+                                                                  name="summary-radio-button" value="long">Long
+                                                              </label>
+                                                          </div>
+                                                      </form>
+                                                </div>
+                                                <div class="article-summary-method-wrapper">
+                                                      <form>
+                                                          <div class="radio">
+                                                              <label>
+                                                                  <input class="top-sentences-radio-button" type="radio"
+                                                                  name="optradio">Top Sentences
+                                                              </label>
+                                                          </div>
+                                                          <div class="radio">
+                                                              <label>
+                                                                  <input class="top-block-of-text-radio-button" type="radio"
+                                                                  name="optradio">Top Block of Text
+                                                              </label>
+                                                          </div>
+                                                      </form>
+                                                </div>
+                                            </div>
+                                            <div class="article-summary"></div>
                                         </div>
                                     </div>
-                                    <div class="article-summary"></div>
+                                <div id="article-results" class="col-md-offset-2 col-md-8">
+                                    
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
-                </div>
-                <div class="tab-pane fade active in" id="dynamic">
-                    <div class="container">
-                        <div class="row">
-                            <textarea class="form-control" id="dynamic-text-area" rows="3"></textarea>
-                        </div>
-                        <div class="row">
-                            <button id="summarize-button" type="button" class="btn btn-primary pull-right">Summarize</button>
+                    <div class="tab-pane fade" id="dynamic">
+                        <div class="container">
+                            <div class="row">
+                                <textarea class="form-control" id="dynamic-text-area" rows="3"></textarea>
+                            </div>
+                            <div class="row">
+                                <button id="summarize-button" type="button" class="btn btn-primary pull-right">Summarize</button>
 
-                        </div>
-                        <div class="row">
-                            <span id="summary-display-area">
-                                
-                            </span>
-                
+                            </div>
+                            <div class="row">
+                                <span id="summary-display-area">
+                                    
+                                </span>
+                    
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="tab-pane fade" id="about">
-                    Han Li and Kevin Jiang, CS 4700
-                </div>
+                    <div class="tab-pane fade" id="about">
+                        Han Li and Kevin Jiang, CS 4700
+                    </div>
                 </div>
             </div>
+            
 
             
         </div>
