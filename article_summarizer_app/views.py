@@ -2,12 +2,9 @@ from django.shortcuts import render_to_response
 from django.core.paginator import Paginator, EmptyPage
 from models import NewsArticle
 from django.http import JsonResponse
-<<<<<<< HEAD
-=======
 from django.core.cache import cache
 import os
 import numpy as np
->>>>>>> 406090732a226c656135e83cc3a182bd77649b38
 
 from text_summarization.lex_rank import LexRank 
 from text_summarization import utils 
@@ -58,7 +55,6 @@ def api_articles_list(request):
 
 
 def api_article_summary(request):
-<<<<<<< HEAD
     news_article_id = request.GET.get('news_article_id')
     summary_type = request.GET.get('summary_type')
     try:
@@ -75,9 +71,6 @@ def api_article_summary(request):
         return JsonResponse({"error_message":"Couldn't fetch article summary"}, status=400)
 
 
-=======
-    pass
-
 def api_summarize(request):
     text = request.GET.get('text')
     length = request.GET.get('length')
@@ -90,4 +83,3 @@ def api_summarize(request):
     summary = lex_rank.get_summary_sentences(text, 2)
     print summary
     return JsonResponse({"result": summary})
->>>>>>> 406090732a226c656135e83cc3a182bd77649b38
