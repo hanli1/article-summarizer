@@ -9,35 +9,53 @@
         <div class="container">
             <div class="row">
                 <ul class="nav nav-tabs pull-right">
-                    <li class="active"><a href="#articles" data-toggle="tab">Articles</a></li>
-                    <li><a href="#dynamic" data-toggle="tab">Dynamic Input</a></li>
+                    <li><a href="#articles" data-toggle="tab">Articles</a></li>
+                    <li class="active"><a href="#dynamic" data-toggle="tab">Dynamic Input</a></li>
                     <li><a href="#about" data-toggle="tab">About</a></li>
                 </ul>
             </div>
+            <div class="row">
+                <div class="tab-content">
+                    <div class="tab-pane fade" id="articles">
+                        <div class="row">
+                            <div class="form-inline global-search" method='GET'>
+                                <div class="form-group">
+                                    <input id="user-selection-input" type="text" name="search" class="form-control shadow" placeholder="Your Input">
+                                    <button id="search-button" class="btn btn-info">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8 offset-md-2 col-centered" id="results">
 
-            <div id="myTabContent" class="tab-content">
-                <div class="tab-pane fade active in" id="articles">
-                    <div class="row">
-                        <div class="form-inline global-search" method='GET'>
-                            <div class="form-group">
-                                <input id="user-selection-input" type="text" name="search" class="form-control shadow" placeholder="Your Input">
-                                <button id="search-button" class="btn btn-info">Search</button>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-8 offset-md-2 col-centered" id="results">
+                    <div class="tab-pane fade active in" id="dynamic">
+                        <div class="container">
+                            <div class="row">
+                                <textarea class="form-control" id="dynamic-text-area" rows="3"></textarea>
+                            </div>
+                            <div class="row">
+                                <button id="summarize-button" type="button" class="btn btn-primary pull-right">Summarize</button>
 
+                            </div>
+                            <div class="row">
+                                <span id="summary-display-area">
+                                    
+                                </span>
+                            </div>
                         </div>
+                        
+                        
+                    </div>
+                    <div class="tab-pane fade" id="about">
+                        Han Li and Kevin Jiang, CS 4700
                     </div>
                 </div>
-                <div class="tab-pane fade" id="dynamic">
-                    DYNamic stuff
-                </div>
-                <div class="tab-pane fade" id="about">
-                    Han Li and Kevin Jiang, CS 4700
-                </div>
             </div>
+
+            
         </div>
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
