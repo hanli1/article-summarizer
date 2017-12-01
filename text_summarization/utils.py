@@ -1,9 +1,11 @@
 import csv
 import preprocess    
+import os.path
 
 def get_kaggle_data():
     text_and_summary = []
-    with open('../data/kaggle.csv', 'r') as f:
+    path = os.path.join(os.path.dirname(__file__), '../data/kaggle.csv')
+    with open(path, 'r') as f:
         reader = csv.reader(f)
         for row in reader:
             summary = row[4]
