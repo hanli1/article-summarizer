@@ -1,5 +1,7 @@
 .date-wrapper {
-
+    font-weight: bold;
+    font-size: 25px;
+    margin-bottom: 15px;
 }
 
 .article-wrapper {
@@ -9,6 +11,8 @@
     padding-left: 5%;
     padding-top: 2%;
     padding-bottom: 2%;
+    display: none;
+    margin-bottom: 15px;
 }
 
 .article-title {
@@ -50,10 +54,21 @@
 .article-summary {
     display: inline-block;
     width: 72%;
+    vertical-align:top;
 }
 
 .article-field-header {
     font-weight: bold;
+    display: block;
+}
+
+.article-summary-length-wrapper {
+    display: block;
+}
+
+.article-summary-method-wrapper {
+    display: block;
+    vertical-align: top;
 }
 
 #article-results {
