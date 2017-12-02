@@ -62,6 +62,11 @@ $( document ).ready(function() {
         var previousArticleWrapper = currentArticlesSelector.eq(currentArticlesSelector.length - 1);
         var templateDateWrapper = currentDatesSelector.eq(0);
 
+        var loader = $('.spinner').eq(0).clone();
+        loader.css("display", "block");
+
+        $('.spinner').eq($('.spinner').length - 1).css("display", "none");
+
         if(pageCount == 1)
             container.empty();
  
@@ -88,7 +93,7 @@ $( document ).ready(function() {
           }
           previousArticleWrapper = currentArticleWrapper;
         }
-
+        container.append(loader);
         pageCount = pageCount + 1;
         if (responseData.last_page_fetched == "true") {
           lastPageFetched = true;
