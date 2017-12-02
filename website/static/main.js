@@ -70,10 +70,9 @@ $( document ).ready(function() {
           var currentArticleWrapper = templateArticleWrapper.clone();
           currentArticleWrapper.data("news_article_id", currentArticle.news_article_id);
           currentArticleWrapper.find(".article-title").first().text(currentArticle.title);
+          currentArticleWrapper.find(".article-title").first().attr("href", currentArticle.original_article_link);
           currentArticleWrapper.find(".article-organization").first().text(currentArticle.organization);
           currentArticleWrapper.find(".article-author").first().text(currentArticle.author);
-          currentArticleWrapper.find(".article-original-link").first().text(currentArticle.original_article_link);
-          currentArticleWrapper.find(".article-original-link").first().attr("href", currentArticle.original_article_link);
           currentArticleWrapper.find(".article-summary").first().text(currentArticle.summary);
           currentArticleWrapper.css("display", "block");
           currentArticleWrapper.find(".short-summary-radio-button").first().prop("checked", true);
