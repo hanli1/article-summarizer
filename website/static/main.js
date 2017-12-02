@@ -23,30 +23,19 @@ $( document ).ready(function() {
 
   $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     var target = $(e.target).attr("href"); // activated tab
-    // if (target == "#articles") {
-    //   hideArticleList = false;
-    //   hideDynamicInput = true;
-    //   hideAbout = true;
-    //   $("#article-results").show();
-    //   $("#dynamic").hide();
-    //   $("#about").hide();
-    // } else if (target == "#dynamic") {
-    //   hideArticleList = true;
-    //   hideDynamicInput = false;
-    //   hideAbout = true;
-    //   $("#article-results").hide();
-    //   $("#dynamic").show();
-    //   $("#about").hide();
-    // } else if (target == "#about") {
-    //   hideArticleList = true;
-    //   hideDynamicInput = true;
-    //   hideAbout = false;
-    //   $("#article-results").hide();
-    //   $("#dynamic").hide();
-    //   $("#about").show();
-    // }
   });
 
+  $("#search-button").click(send_search_query);
+    function send_search_query(){
+        textQuery = $("#search-input").val();
+        pageCount = 1;
+        var container = $("#article-results");
+        var loader = $('.spinner').eq(0).clone();
+        loader.css("display", "block");
+        container.empty();   
+        container.append(loader);   
+        fetchArticleList(textQuery);
+    }
   function fetchArticleList(textQuery) {
     $.ajax({
       url: "api/articles_list",

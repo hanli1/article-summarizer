@@ -118,7 +118,8 @@ body {
     font-size: 1.1em;
 }
 
-.btn{
+.btn, .btn:active, .btn:focus{
+    color: white;
   background-color: #9B4DCA;
   transition: all 0.25s ease 0s;
   text-align: center;
