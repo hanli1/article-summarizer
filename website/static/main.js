@@ -8,23 +8,12 @@ $( document ).ready(function() {
   var hideDynamicInput = true; //Whether or not the dynamic input page is hidden
   var hideAbout = true; //Whether or not the about page is hidden
 
-
-  $("#search-button").click(send_search_query);
-  
-  function send_search_query(){
-    $("#search-button").blur();
-    textQuery = $("#search-input").val();
-    pageCount = 1;
-    fetchArticleList(textQuery);
-  }
-
   $("#summarize-button").click(send_summarize_query);
 
   function send_summarize_query() {
-    $("#summarize-button").blur();
     data = {
       text: $("#dynamic-text-area").val(),
-      length: "short"
+      length: $('input[name="dynamic-summary-length"]:checked').val()
     }
     $.get('api/summarize', data, function (response) {
       var summary = response["result"];
@@ -34,29 +23,28 @@ $( document ).ready(function() {
 
   $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     var target = $(e.target).attr("href"); // activated tab
-    console.log(target);
-    if (target == "#articles") {
-      hideArticleList = false;
-      hideDynamicInput = true;
-      hideAbout = true;
-      $("#article-results").show();
-      $("#dynamic").hide();
-      $("#about").hide();
-    } else if (target == "#dynamic") {
-      hideArticleList = true;
-      hideDynamicInput = false;
-      hideAbout = true;
-      $("#article-results").hide();
-      $("#dynamic").show();
-      $("#about").hide();
-    } else if (target == "#about") {
-      hideArticleList = true;
-      hideDynamicInput = true;
-      hideAbout = false;
-      $("#article-results").hide();
-      $("#dynamic").hide();
-      $("#about").show();
-    }
+    // if (target == "#articles") {
+    //   hideArticleList = false;
+    //   hideDynamicInput = true;
+    //   hideAbout = true;
+    //   $("#article-results").show();
+    //   $("#dynamic").hide();
+    //   $("#about").hide();
+    // } else if (target == "#dynamic") {
+    //   hideArticleList = true;
+    //   hideDynamicInput = false;
+    //   hideAbout = true;
+    //   $("#article-results").hide();
+    //   $("#dynamic").show();
+    //   $("#about").hide();
+    // } else if (target == "#about") {
+    //   hideArticleList = true;
+    //   hideDynamicInput = true;
+    //   hideAbout = false;
+    //   $("#article-results").hide();
+    //   $("#dynamic").hide();
+    //   $("#about").show();
+    // }
   });
 
   function fetchArticleList(textQuery) {

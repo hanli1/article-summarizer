@@ -1,3 +1,7 @@
+body {
+    overflow-y: scroll; 
+}
+
 .date-wrapper {
     font-weight: bold;
     font-size: 25px;

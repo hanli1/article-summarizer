@@ -87,9 +87,15 @@ def api_summarize(request):
 
     if not cache.get('lex_rank'):
         corpus = list(map(lambda x: x[0], utils.get_kaggle_data()))
+        print "calculating lexrank"
         cache.set('lex_rank', LexRank(corpus))
     lex_rank = cache.get('lex_rank')
 
-    summary = lex_rank.get_summary_sentences(text, 2)
-    print summary
+    num = 1
+    if length == "long":
+        num = 5
+    elif length == "medium":
+        num = 3
+
+    summary = lex_rank.get_summary_sentences(text, num)
     return JsonResponse({"result": summary})
