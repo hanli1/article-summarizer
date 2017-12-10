@@ -3,20 +3,20 @@ import preprocess
 import os.path
 
 def get_kaggle_data():
-    text_and_summary = []
+    article_and_summary = []
     path = os.path.join(os.path.dirname(__file__), '../data/kaggle.csv')
     with open(path, 'r') as f:
         reader = csv.reader(f)
         for row in reader:
             summary = row[4]
-            text = row[5]
+            article = row[5]
             if summary == "text":
                 continue
-            if text == "":
+            if article == "":
                 # dataset messed up
                 continue
 
             summary = preprocess.remove_non_ascii(summary)
-            text = preprocess.remove_non_ascii(text)
-            text_and_summary.append((text, summary))
-    return text_and_summary
+            article = preprocess.remove_non_ascii(article)
+            article_and_summary.append((article, summary))
+    return article_and_summary
