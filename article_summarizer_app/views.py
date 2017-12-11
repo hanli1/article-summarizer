@@ -9,6 +9,18 @@ import numpy as np
 from text_summarization.lex_rank import LexRank 
 from text_summarization import utils 
 from text_summarization import main
+import json
+
+
+def repopulate_lex_rank():
+    all_articles = []
+    for data_file in ["data/bbc_new_1001.json", "data/abc_new_1001.json"]:
+        with open(data_file, "r") as f:
+            current_articles = json.load(f)
+            all_articles += current_articles
+    lex_rank = LexRank(list(map(lambda x: " ".join(x["text"]) if x["organization"] == "BBC" else x["text"],
+                                all_articles)))
+    cache.set('lex_rank', lex_rank, None)
 
 def index(request):
     output_list = ''
@@ -23,7 +35,7 @@ def api_articles_list(request):
     articles = None
     try:
         if text_query:
-            articles = NewsArticle.objects.order_by('-date')   
+            articles = NewsArticle.objects.order_by('-date')
             date_dict = {}
             for article in articles:
                 date = article.date
@@ -90,19 +102,31 @@ def api_article_summary(request):
 
 def api_summarize(request):
     text = request.GET.get('text')
-    length = request.GET.get('length')
+    summary_length = request.GET.get('summary_length')
+    summary_style = request.GET.get('summary_style')
 
     if not cache.get('lex_rank'):
-        corpus = list(map(lambda x: x[0], utils.get_kaggle_data()))
-        print "calculating lexrank"
-        cache.set('lex_rank', LexRank(corpus))
+        repopulate_lex_rank()
     lex_rank = cache.get('lex_rank')
 
-    num = 1
-    if length == "long":
-        num = 5
-    elif length == "medium":
+    num = None
+    block = None
+    if summary_length == "short":
+        num = 1
+        block = False
+    elif summary_length == "medium":
         num = 3
+        if summary_style == "top":
+            block = False
+        else:
+            block = True
+    else:
+        num = 5
+        if summary_style == "top":
+            block = False
+        else:
+            block = True
 
-    summary = lex_rank.get_summary_sentences(text, num)
+    lex_rank.compute_sentence_page_rank_ordering(text)
+    summary = lex_rank.get_summary_sentences(num, block=block)
     return JsonResponse({"result": summary})

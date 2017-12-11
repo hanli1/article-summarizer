@@ -32,6 +32,7 @@ class LexRank:
         self.current_sentence_page_ranks = {}
         self.current_sentence_graph_nodes = []
         self.current_node_id_to_sentence = {}
+        self.embeddings = {}
         if self.sentence_representation == "embedding":
             self.initialize_lexicon()
             self.initialize_embeddings()

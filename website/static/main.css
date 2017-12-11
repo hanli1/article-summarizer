@@ -179,3 +179,7 @@ a, a:hover, a:focus{
     -webkit-transform: scale(1.0);
   }
 }
+
+#dynamic-summary-length-wrapper {
+    margin-bottom: 25px;
+}

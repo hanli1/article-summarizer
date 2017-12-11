@@ -13,7 +13,8 @@ $( document ).ready(function() {
   function send_summarize_query() {
     data = {
       text: $("#dynamic-text-area").val(),
-      length: $('input[name="dynamic-summary-length"]:checked').val()
+      summary_length: $('input[name="dynamic-summary-length"]:checked').val(),
+      summary_style: $('input[name="dynamic-summary-style"]:checked').val()
     }
     $.get('api/summarize', data, function (response) {
       var summary = response["result"];
