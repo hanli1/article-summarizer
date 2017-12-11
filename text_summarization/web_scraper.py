@@ -48,19 +48,19 @@ class WebScraper:
                 parsed_article = parse_bbc_article(current_article)
                 self.process_article(parsed_article, "bbc.com", "BBC")
             elif parse_uri.netloc == "www.abcnews.go.com" or parse_uri.netloc == "abcnews.go.com":
-                #print("HELLO")
                 parsed_article = parse_abc_article(current_article)
                 self.process_article(parsed_article, "abcnews.go.com", "ABC News")
             #print("FRONTIER:{}".format(self.frontier_urls))
             a += 1
         #print("ITERATIONS: {}".format(a))
         print("ENDING FRONTIER SIZE: {}".format(len(self.frontier_urls)))
-        with open("data/articles_{}".format(len(self.all_scraped_articles)), "w") as f:
+        with open("data/abc_new_{}".format(len(self.all_scraped_articles)), "w") as f:
             json.dump(self.all_scraped_articles, f)
 
 if __name__ == '__main__':
     web_scraper = WebScraper()
-    web_scraper.scrape_articles(["http://www.bbc.com/news/world-us-canada-41954436", \
-        "http://www.bbc.com/news/technology-41942310", \
-        "http://www.bbc.com/sport/rugby-union/41934487", \
-        "http://www.bbc.com/news/entertainment-arts-41935971"])
+    # web_scraper.scrape_articles(["http://www.bbc.com/news/world-us-canada-41954436", \
+    #     "http://www.bbc.com/news/technology-41942310", \
+    #     "http://www.bbc.com/sport/rugby-union/41934487", \
+    #     "http://www.bbc.com/news/entertainment-arts-41935971"])
+    web_scraper.scrape_articles(["http://abcnews.go.com/Politics/judge-roy-moore-avoids-spotlight-ahead-alabama-senate/story?id=51705509&cid=clicksource_4380645_4_film_strip_icymi_hed"])

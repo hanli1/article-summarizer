@@ -82,12 +82,14 @@ $( document ).ready(function() {
           }
           previousArticleWrapper = currentArticleWrapper;
         }
-        container.append(loader);
+        if(responseData.articles_list.length != 0)
+            container.append(loader);
         pageCount = pageCount + 1;
         if (responseData.last_page_fetched == "true") {
           lastPageFetched = true;
         }
         pageFetchInProgress = false;
+
       }
     });
   }
