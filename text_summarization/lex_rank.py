@@ -126,7 +126,7 @@ class LexRank:
 def evaluate_lex_rank(text_and_summary):
     corpus = list(map(lambda x: x[0], text_and_summary))
     lex_rank_parameter_sets = []
-    cosine_similarity_cutoffs = [0.85]
+    cosine_similarity_cutoffs = [0.75]
     for cutoff in cosine_similarity_cutoffs:
         lex_rank_parameter_sets.append({
            "cosine_similarity_cutoff": cutoff 
