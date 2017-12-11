@@ -66,14 +66,21 @@ def api_articles_list(request):
 
 def api_article_summary(request):
     news_article_id = request.GET.get('news_article_id')
-    summary_type = request.GET.get('summary_type')
+    summary_length = request.GET.get('summary_length')
+    summary_style = request.GET.get('summary_style')
     try:
         news_article = NewsArticle.objects.get(news_article_id=news_article_id)
         summary = None
-        if summary_type == "long":
-            summary = news_article.long_summary
-        elif summary_type == "medium":
-            summary = news_article.medium_summary
+        if summary_length == "long":
+            if summary_style == "top":
+                summary = news_article.long_top_summary
+            else:
+                summary = news_article.long_block_summary
+        elif summary_length == "medium":
+            if summary_style == "top":
+                summary = news_article.medium_top_summary
+            else:
+                summary = news_article.medium_block_summary
         else:
             summary = news_article.short_summary
         return JsonResponse({"summary": summary})

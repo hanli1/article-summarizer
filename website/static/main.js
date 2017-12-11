@@ -106,19 +106,34 @@ $( document ).ready(function() {
     }
   });
 
-  $('#article-results').on('change', 'input[name="summary-radio-button"]', function() {
-    var articleWrapper = $(this).parents(".article-wrapper").first();
-    radioValue = $(this).val();
+  function updateArticleSummary(articleWrapper, summaryLength, summaryStyle) {
     $.ajax({
       url: "api/article_summary",
       data: {
         news_article_id: articleWrapper.data("news_article_id"),
-        summary_type: radioValue
+        summary_length: summaryLength,
+        summary_style: summaryStyle
       },
       success: function (responseData) {
         articleWrapper.find(".article-summary").first().text(responseData.summary);
       }
     })
+  }
+
+  $('#article-results').on('change', 'input[name="summary-length-radio-button"]', function() {
+    var articleWrapper = $(this).parents(".article-wrapper").first();
+    var summaryLength = $(this).val();
+    var summaryStyle =$(this).parents(".article-wrapper").find('input[name="summary-style-radio-button"]:checked').val();
+    console.log(summaryStyle);
+    updateArticleSummary(articleWrapper, summaryLength, summaryStyle);
+  });
+
+  $('#article-results').on('change', 'input[name="summary-style-radio-button"]', function() {
+    var articleWrapper = $(this).parents(".article-wrapper").first();
+    var summaryLength = $(this).parents(".article-wrapper").find('input[name="summary-length-radio-button"]:checked').val();
+    var summaryStyle = $(this).val();
+    console.log(summaryLength);
+    updateArticleSummary(articleWrapper, summaryLength, summaryStyle);
   });
 
   fetchArticleList(textQuery);

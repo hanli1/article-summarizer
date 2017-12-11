@@ -29,6 +29,9 @@ class LexRank:
         self.page_rank_damping = page_rank_damping
         self.page_rank_epislon = page_rank_epislon
         self.sentence_representation = sentence_representation
+        self.current_sentence_page_ranks = {}
+        self.current_sentence_graph_nodes = []
+        self.current_node_id_to_sentence = {}
         if self.sentence_representation == "embedding":
             self.initialize_lexicon()
             self.initialize_embeddings()
@@ -92,54 +95,71 @@ class LexRank:
         elif self.sentence_representation == "tf-idf":
             pass
 
-    def compute_lex_rank_ordering(self, document):
-        sentence_graph_nodes = []
-        node_id_to_sentence = {}
+    def compute_sentence_page_rank_ordering(self, document):
         sentences = self.tokenize_into_sentences(document)
-        for i in range(len(sentences)):
-            sentence_graph_nodes.append(SentenceNode(sentences[i], i))
-            node_id_to_sentence[i] = sentences[i]
-        for i in range(len(sentence_graph_nodes)):
-            current_node_neighbors = []
-            for j in range(len(sentence_graph_nodes)):
-                if i != j:
-                    sentence1_vector = self.get_sentence_representation(sentence_graph_nodes[i].sentence)
-                    sentence2_vector = self.get_sentence_representation(sentence_graph_nodes[j].sentence)
-                    cosine_similarity = self.get_cosine_similarity(sentence1_vector, \
-                        sentence2_vector)
-                    if cosine_similarity > self.cosine_similarity_cutoff:
-                        current_node_neighbors.append(sentence_graph_nodes[j])
-            sentence_graph_nodes[i].neighbors = current_node_neighbors
-        page_rank_distribution = self.page_rank(sentence_graph_nodes)
-        page_rank_and_sentences = []
-        for i in range(len(page_rank_distribution)):
-            page_rank_and_sentences.append((node_id_to_sentence[i], page_rank_distribution[i]))
-        sorted_page_rank_and_sentences = sorted(page_rank_and_sentences, key=lambda x: x[1], \
-            reverse=True)
-        return list(map(lambda x: x[0], sorted_page_rank_and_sentences))
+        self.current_sentence_page_ranks = {}
+        self.current_sentence_graph_nodes = []
+        self.current_node_id_to_sentence = {}
 
-    def get_summary_sentences(self, document, sentence_count):
-        lex_rank_ordering = self.compute_lex_rank_ordering(document)
-        return lex_rank_ordering[:sentence_count]
+        for i in range(len(sentences)):
+            self.current_sentence_graph_nodes.append(SentenceNode(sentences[i], i))
+            self.current_node_id_to_sentence[i] = sentences[i]
+        for i in range(len(self.current_sentence_graph_nodes)):
+            current_node_neighbors = []
+            for j in range(len(self.current_sentence_graph_nodes)):
+                if i != j:
+                    sentence1_vector = self.get_sentence_representation(self.current_sentence_graph_nodes[i].sentence)
+                    sentence2_vector = self.get_sentence_representation(self.current_sentence_graph_nodes[j].sentence)
+                    cosine_similarity = self.get_cosine_similarity(sentence1_vector, sentence2_vector)
+                    if cosine_similarity > self.cosine_similarity_cutoff:
+                        current_node_neighbors.append(self.current_sentence_graph_nodes[j])
+            self.current_sentence_graph_nodes[i].neighbors = current_node_neighbors
+        page_rank_distribution = self.page_rank(self.current_sentence_graph_nodes)
+        self.current_sentence_page_ranks = {}
+        for i in range(len(page_rank_distribution)):
+            self.current_sentence_page_ranks[i] = page_rank_distribution[i]
+
+    def get_summary_sentences(self, sentence_count, block=False):
+        if block:
+            largest_page_rank = 0.0
+            largest_block_id = 0
+            for i in range(len(self.current_sentence_graph_nodes) - sentence_count + 1):
+                current_page_rank = 0.0
+                for j in range(i, i + sentence_count):
+                    current_page_rank += self.current_sentence_page_ranks[j]
+                if current_page_rank > largest_page_rank:
+                    largest_page_rank = current_page_rank
+                    largest_block_id = i
+            block_summary = []
+            for k in range(largest_block_id, largest_block_id + sentence_count):
+                block_summary.append(self.current_node_id_to_sentence[k])
+            return " ".join(block_summary)
+        else:
+            page_rank_and_sentences = []
+            for i in self.current_sentence_page_ranks:
+                page_rank_and_sentences.append((self.current_node_id_to_sentence[i],
+                                                self.current_sentence_page_ranks[i]))
+            sorted_page_rank_and_sentences = sorted(page_rank_and_sentences, key=lambda x: x[1], reverse=True)
+            top_sentences = list(map(lambda x: x[0], sorted_page_rank_and_sentences))
+            return " ".join(top_sentences[:sentence_count])
 
 
 def evaluate_lex_rank(text_and_summary):
     corpus = list(map(lambda x: x[0], text_and_summary))
     lex_rank_parameter_sets = []
-    cosine_similarity_cutoffs = [0.75]
+    cosine_similarity_cutoffs = [0.70]
     for cutoff in cosine_similarity_cutoffs:
         lex_rank_parameter_sets.append({
            "cosine_similarity_cutoff": cutoff 
         })
     for parameter_set in lex_rank_parameter_sets:
-        lex_rank = LexRank(corpus=corpus, cosine_similarity_cutoff=\
-            parameter_set["cosine_similarity_cutoff"])
+        lex_rank = LexRank(corpus=corpus, cosine_similarity_cutoff=parameter_set["cosine_similarity_cutoff"])
         total_precision = 0.0
         total_recall = 0.0
         for (text, summary) in tqdm(text_and_summary):
-            summary_sentences = lex_rank.get_summary_sentences(text, 2)
-            (precision, recall) = evaluate.rouge1_precision_and_recall(" ".join(summary_sentences), \
-                summary)
+            lex_rank.compute_sentence_page_rank_ordering(text)
+            summary_sentences = lex_rank.get_summary_sentences(2, block=False)
+            (precision, recall) = evaluate.rouge1_precision_and_recall(summary_sentences, summary)
             total_precision += precision
             total_recall += recall
         final_precision = total_precision / len(text_and_summary)
