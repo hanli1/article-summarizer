@@ -40,10 +40,17 @@ def parse_bbc_article(url):
         }
 
 def parse_abc_article(url):
+    links = []
     try:
         print("URL:{}".format(url))
         page = urllib2.urlopen(url)
         soup = BeautifulSoup(page, 'html.parser')
+
+        links = [x['href'] for x in soup.find('section', attrs={'id': 'news-feed'}).find_all('a', href=True) if "photos" not in x['href'] and "video" not in x['href']]
+        # for l in [x['href'] for x in soup.find_all('a', href=True)]:
+        #     m = re.search(r'\d{8}$', l)
+        #     if m and "mailto" not in l and "twitter" not in l and "account" not in l:
+        #         links.append(l)
 
         title = soup.find('header', attrs={'class': 'article-header'}).find('h1').text
         date = soup.find('span', attrs={'class': 'timestamp'}).text
@@ -51,8 +58,7 @@ def parse_abc_article(url):
 
         text = " ".join([x.text for x in soup.findAll(itemprop="articleBody")])
 
-        links = [x['href'] for x in soup.find('section', attrs={'id': 'news-feed'}).find_all('a', href=True)]
-
+        
         return {
             'title': title,
             'author': author,
@@ -67,7 +73,7 @@ def parse_abc_article(url):
             'author': "",
             'date': "",
             'text': "",
-            'links': "",
+            'links': links,
             'article_url': ""
         }
 
